@@ -172,6 +172,7 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
+const HOST = process.env.IP || '0.0.0.0';
+server.listen(PORT, HOST, () => {
+  console.log(`Serveur en cours d'exécution sur http://${HOST}:${PORT}`);
 });
