@@ -171,8 +171,8 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
-const HOST = process.env.IP || '0.0.0.0';
+const PORT = process.env.ALWAYSDATA_HTTPD_PORT || process.env.PORT || 3001;
+const HOST = process.env.ALWAYSDATA_HTTPD_IP || process.env.IP || '0.0.0.0';
 server.listen(PORT, HOST, () => {
   console.log(`Serveur en cours d'exécution sur http://${HOST}:${PORT}`);
 });
