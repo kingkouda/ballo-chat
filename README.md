@@ -1,6 +1,6 @@
 <div align="center">
   <h1>✨ Ballo Chat</h1>
-  <p>Une application de messagerie instantanée moderne, immersive et en temps réel.</p>
+  <p> Ballo qui signifie causerie en Dioula... Ballo Chat est une application de messagerie instantanée moderne, immersive et en temps réel.</p>
 </div>
 
 ## 🚀 À propos du projet
