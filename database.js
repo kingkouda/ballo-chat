@@ -111,7 +111,9 @@ const updateMessageStatus = async (senderId, receiverId, status) => {
 
 const getAllUsers = async () => {
   const db = readDB();
-  return db.users.map(u => ({ id: u.id, username: u.username, color: u.color, avatar: u.avatar }));
+  return db.users
+    .filter(u => !u.isDeleted)
+    .map(u => ({ id: u.id, username: u.username, color: u.color, avatar: u.avatar }));
 };
 
 const updateProfile = async (userId, newUsername, newColor) => {
@@ -127,6 +129,21 @@ const updateProfile = async (userId, newUsername, newColor) => {
   return { id: user.id, username: user.username, color: user.color, avatar: user.avatar };
 };
 
+const deleteUser = async (userId) => {
+  const db = readDB();
+  const user = db.users.find(u => u.id === userId);
+  if (!user) throw new Error('User not found');
+  
+  user.username = "Utilisateur Supprimé";
+  user.color = "#6b7280"; // Gray color
+  user.avatar = "?";
+  user.password_hash = null;
+  user.isDeleted = true;
+  writeDB(db);
+  
+  return true;
+};
+
 module.exports = {
   db: null,
   registerUser,
@@ -135,5 +152,6 @@ module.exports = {
   getPrivateMessages,
   updateMessageStatus,
   getAllUsers,
-  updateProfile
+  updateProfile,
+  deleteUser
 };

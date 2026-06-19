@@ -155,6 +155,25 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('delete_account', async (userId) => {
+    try {
+      await db.deleteUser(userId);
+      // Remove from active users list
+      if (userSockets.has(userId)) {
+        userSockets.get(userId).forEach(sockId => {
+          connectedUsers.delete(sockId);
+        });
+        userSockets.delete(userId);
+      }
+      
+      const allUsers = await db.getAllUsers();
+      io.emit('users list', allUsers);
+      io.emit('user status', { userId: userId, online: false });
+    } catch (error) {
+      console.error('Erreur lors de la suppression de compte:', error);
+    }
+  });
+
   socket.on('disconnect', () => {
     const userId = connectedUsers.get(socket.id);
     if (userId) {

@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const profileError = document.getElementById('profile-error');
   const closeProfileBtn = document.getElementById('close-profile-btn');
   const settingsBtn = document.getElementById('settings-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+  const deleteAccountBtn = document.getElementById('delete-account-btn');
 
   const messageInput = document.getElementById('message-input');
   const sendButton = document.getElementById('send-button');
@@ -185,6 +187,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeProfileBtn.addEventListener('click', () => {
     profileModal.classList.add('hidden');
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('ballochat_user');
+    window.location.reload();
+  });
+
+  deleteAccountBtn.addEventListener('click', () => {
+    const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.");
+    if (confirmDelete) {
+      if (socket) {
+        socket.emit('delete_account', currentUser.id);
+      }
+      localStorage.removeItem('ballochat_user');
+      window.location.reload();
+    }
   });
 
   profileForm.addEventListener('submit', async (e) => {
