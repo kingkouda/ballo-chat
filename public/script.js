@@ -42,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const emojiPicker = document.getElementById('emoji-picker');
   const emojiGrid = document.getElementById('emoji-grid');
   const sidebar = document.getElementById('sidebar');
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const toggleSidebarBtn = document.getElementById('toggle-sidebar');
   const toastContainer = document.getElementById('toast-container');
   const searchInput = document.getElementById('search-contacts');
   const filterBtns = document.querySelectorAll('.filter-btn');
@@ -58,6 +56,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let usersList = [];
   let onlineUsers = new Set();
   let currentFilter = 'all';
+
+  // --- Mobile View State ---
+  function setMobileView(view) {
+    if (window.innerWidth > 768) return; 
+    
+    appWrapper.classList.remove('view-welcome', 'view-sidebar', 'view-chat');
+    appWrapper.classList.add(`view-${view}`);
+  }
+
+  const mobileStartChatBtn = document.getElementById('mobile-start-chat-btn');
+  if (mobileStartChatBtn) {
+    mobileStartChatBtn.addEventListener('click', () => setMobileView('sidebar'));
+  }
+
+  const mobileBackBtn = document.getElementById('mobile-back-btn');
+  if (mobileBackBtn) {
+    mobileBackBtn.addEventListener('click', () => setMobileView('sidebar'));
+  }
 
   // --- Audio ---
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -277,6 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.contact-item').forEach(c => c.classList.remove('active'));
         item.classList.add('active');
         
+        setMobileView('chat');
+        
         currentPeerId = u.id;
         peerNameEl.textContent = u.username;
         headerAvatarEl.textContent = u.avatar;
@@ -327,6 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function initApp() {
     authModal.classList.add('hidden');
     appWrapper.classList.remove('hidden');
+    setMobileView('welcome');
     updateMyProfileUI();
     
     // Personalize welcome text
@@ -524,24 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', (e) => {
     if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
       emojiPicker.classList.add('hidden');
-    }
-  });
-
-  // --- Mobile Sidebar Overlay ---
-  const sidebarOverlay = document.createElement('div');
-  sidebarOverlay.className = 'sidebar-overlay';
-  document.body.appendChild(sidebarOverlay);
-
-  function toggleMobileSidebar() {
-    sidebar.classList.toggle('open');
-    sidebarOverlay.classList.toggle('show');
-  }
-
-  mobileMenuBtn.addEventListener('click', toggleMobileSidebar);
-  sidebarOverlay.addEventListener('click', toggleMobileSidebar);
-  toggleSidebarBtn.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      toggleMobileSidebar();
     }
   });
 

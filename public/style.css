@@ -792,49 +792,56 @@ body {
 }
 
 /* ── 15. RESPONSIVE — MOBILE FIRST ─────────────────────────── */
+.mobile-only-btn { display: none; }
+.desktop-only-hint { display: block; }
+.mobile-back-btn { display: none; }
+
 @media (max-width: 768px) {
-  :root {
-    --sidebar-w: 100%;
+  .mobile-only-btn { display: block; width: 100%; }
+  .desktop-only-hint { display: none; }
+  .mobile-back-btn { display: flex; margin-right: 10px; }
+
+  .app-wrapper {
+    position: relative;
+    overflow: hidden;
   }
 
-  .sidebar {
-    position: fixed;
+  .sidebar, .chat-panel, .welcome-overlay {
+    position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
     height: 100%;
-    width: 280px;
-    transform: translateX(-100%);
-    box-shadow: var(--glass-shadow);
+    z-index: 1;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background: var(--bg-base); /* Ensure solid background on mobile */
   }
 
-  .sidebar.open {
+  /* State: Welcome */
+  .app-wrapper.view-welcome .welcome-overlay {
     transform: translateX(0);
+    z-index: 10;
+  }
+  
+  /* State: Sidebar (Contacts) */
+  .app-wrapper.view-sidebar .sidebar {
+    transform: translateX(0);
+    z-index: 10;
   }
 
-  .chat-panel { width: 100%; }
-
-  .mobile-menu-btn { display: flex; }
-
-  /* Overlay for mobile sidebar */
-  .sidebar-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 90;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--transition-med);
+  /* State: Chat */
+  .app-wrapper.view-chat .chat-panel {
+    transform: translateX(0);
+    z-index: 10;
   }
 
-  .sidebar-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
+  .sidebar-overlay { display: none !important; }
   .message { max-width: 88%; }
-
   .chat-body { padding: 16px 12px 8px; }
-
   .chat-footer { padding: 10px 12px; }
 }
 
