@@ -822,6 +822,7 @@ body {
   }
 
   /* State: Welcome */
+  .app-wrapper.view-welcome .chat-panel,
   .app-wrapper.view-welcome .welcome-overlay {
     transform: translateX(0);
     z-index: 10;
