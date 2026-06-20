@@ -179,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok) {
         currentUser = data.user;
+        localStorage.setItem('ballochat_user', JSON.stringify(currentUser));
         initApp();
       } else {
         authError.textContent = data.error || "Une erreur est survenue";
@@ -235,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (res.ok) {
         currentUser = data.user;
+        localStorage.setItem('ballochat_user', JSON.stringify(currentUser));
         updateMyProfileUI();
         profileModal.classList.add('hidden');
         showToast("Profil mis à jour !");
@@ -549,4 +551,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Init UI
   messageInput.disabled = true; // Disabled until a peer is selected
   sendButton.disabled = true;
+
+  // --- Auto-Login ---
+  const savedUser = localStorage.getItem('ballochat_user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      initApp();
+    } catch(e) {
+      console.error('Auto-login error:', e);
+      localStorage.removeItem('ballochat_user');
+    }
+  }
 });

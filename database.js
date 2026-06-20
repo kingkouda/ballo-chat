@@ -2,7 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
-const dbPath = path.resolve(__dirname, 'database.json');
+let dbPath = path.resolve(__dirname, 'database.json');
+if (process.env.WEBSITE_SITE_NAME) {
+  const azureDataDir = '/home/data';
+  if (!fs.existsSync(azureDataDir)) {
+    fs.mkdirSync(azureDataDir, { recursive: true });
+  }
+  dbPath = path.resolve(azureDataDir, 'database.json');
+}
 
 // Initialisation du fichier JSON
 if (!fs.existsSync(dbPath)) {
